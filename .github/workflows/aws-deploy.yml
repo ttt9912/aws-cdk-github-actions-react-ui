@@ -24,40 +24,9 @@ jobs:
         run: cd infrastructure
       - name: Install dependencies
         run: npm install
-      - name: Install dependencies
+      - name: Build
         run: npm run build
       - name: Synth stack
         run: npx cdk synth
       - name: Deploy stack
         run: npx cdk deploy --all --require-approval never
-  deploy-to-s3:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Check out Git repository
-        uses: actions/checkout@v2
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '14.x'
-      - name: node_modules caching
-        uses: actions/cache@v1
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - name: NPM Install
-        run: npm install
-      - name: Production Build
-        run: npm run build --prod
-      - name: Deploy to S3
-        uses: jakejarvis/s3-sync-action@v0.5.1
-        with:
-          # --delete => permanently deletes files in S3 bucket that are not present in latest build
-          args: --delete
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_S3_BUCKET: 'demo-static-react-blabla-1999-bucket'
-          AWS_REGION: 'eu-central-1'
-          SOURCE_DIR: 'dist/'
