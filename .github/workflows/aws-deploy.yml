@@ -8,6 +8,9 @@ on:
 jobs:
   aws_cdk:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./infrastructure
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -20,9 +23,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: 'eu-central-1'
-      - name: Workdir
-        run: cd ./infrastructure
-      - name: Workdir
+      - name: ls
         run: ls
       - name: Install dependencies
         run: npm install
