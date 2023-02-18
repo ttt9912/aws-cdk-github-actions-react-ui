@@ -22,6 +22,8 @@ jobs:
           aws-region: 'eu-central-1'
       - name: Workdir
         run: cd infrastructure
+      - name: Workdir
+        run: ls
       - name: Install dependencies
         run: npm install
       - name: Build
